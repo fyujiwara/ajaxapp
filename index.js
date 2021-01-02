@@ -1,13 +1,16 @@
 function main() {
-  fetchUserInfo("js-primer-example");
+  fetchUserInfo("js-primer-example")
+    .catch(error => {
+      console.error(`エラーが発生しました (${error})`);
+    });
 }
 
 function fetchUserInfo(userId) {
-  fetch(`https://api.github.com/users/${encodeURIComponent(userId)}`)
+  return fetch(`https://api.github.com/users/${encodeURIComponent(userId)}`)
     .then(response => {
       // エラーレスポンスが返されたことを検知する
       if (!response.ok) {
-        console.error("エラーレスポンス", response);
+        return Promise.reject(new Error(`${response.status}: ${response.statusText}`));
       } else {
         return response.json().then(userInfo => {
           // HTMLの挿入
@@ -15,9 +18,7 @@ function fetchUserInfo(userId) {
           displayView(view)
         });
       }
-    }).catch(error => {
-      console.error(error);
-    });
+    })
 }
 
 function escapeSpecialChars(str) {
