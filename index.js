@@ -1,8 +1,10 @@
 function main() {
   fetchUserInfo("js-primer-example")
+    .then((userInfo) => createView(userInfo))
+    .then((view) => displayView(view))
     .catch(error => {
       console.error(`エラーが発生しました (${error})`);
-    });
+    })
 }
 
 function fetchUserInfo(userId) {
@@ -12,11 +14,7 @@ function fetchUserInfo(userId) {
       if (!response.ok) {
         return Promise.reject(new Error(`${response.status}: ${response.statusText}`));
       } else {
-        return response.json().then(userInfo => {
-          // HTMLの挿入
-          const view = createView(userInfo)
-          displayView(view)
-        });
+        return response.json()
       }
     })
 }
